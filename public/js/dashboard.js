@@ -16,12 +16,8 @@ async function loadDashboard(city) {
             return;
         }
 
-        if (!data.success) {
-            console.log(data.message);
-            return;
-        }
-
         console.log("Dashboard Data:", data);
+
 
         /* CURRENT WEATHER */
 
@@ -146,9 +142,11 @@ async function loadDashboard(city) {
 
 
         /* PERSONALIZED DATA */
+
         console.log("Logged in user:", data.user);
         console.log("User Type:", data.user?.userType);
         console.log("Personalized Data:", data.personalizedData);
+
         const personalized =
             data.personalizedData;
 
@@ -184,12 +182,77 @@ async function loadDashboard(city) {
             `;
         });
 
+
+        /* TODAY'S SUGGESTIONS */
+
+        console.log("Today's Suggestions:", data.suggestions);
+
+        const suggestionsContainer =
+            document.getElementById("suggestionsContainer");
+
+        if (suggestionsContainer) {
+
+            suggestionsContainer.innerHTML = "";
+
+            if (
+                data.suggestions &&
+                data.suggestions.length > 0
+            ) {
+
+                data.suggestions.forEach(suggestion => {
+
+                    suggestionsContainer.innerHTML += `
+                        <div class="suggestion-card">
+
+                            <div class="suggestion-icon">
+
+                                <i class="${suggestion.icon}"></i>
+
+                            </div>
+
+                            <div class="suggestion-content">
+
+                                <h3>
+                                    ${suggestion.title}
+                                </h3>
+
+                                <p>
+                                    ${suggestion.text}
+                                </p>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                });
+
+            } else {
+
+                suggestionsContainer.innerHTML = `
+                    <div class="no-suggestions">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        <p>
+                            No special weather suggestions
+                            for today.
+                        </p>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
     } catch (error) {
 
         console.log("Dashboard error:", error);
 
     }
 }
+
 
 
 /* DASHBOARD SEARCH */
@@ -215,6 +278,7 @@ if (searchForm) {
     });
 
 }
+
 
 
 /* HEADER SEARCH */
@@ -256,14 +320,9 @@ if (headerSearchButton && headerCitySearch) {
             headerSearchButton.click();
 
         }
-
     });
-
 }
-
-
 /* WEATHER ICON */
-
 function getWeatherIcon(weather) {
 
     const condition =
@@ -312,8 +371,6 @@ function getWeatherIcon(weather) {
 
     return "fa-cloud-sun";
 }
-
-
 /* FORMAT LABEL */
 
 function formatLabel(text) {
@@ -323,8 +380,6 @@ function formatLabel(text) {
         .replace(/^./, str => str.toUpperCase());
 
 }
-
-
 /* DEFAULT CITY */
 
 loadDashboard("Patna");

@@ -161,6 +161,233 @@ function getPersonalizedData(userType, weather) {
             };
     }
 }
+/* TODAY'S PERSONALIZED SUGGESTIONS */
+
+function getSuggestions(userType, weather, aqi, forecastList) {
+
+    const suggestions = [];
+
+    const temp = weather.main.temp;
+    const humidity = weather.main.humidity;
+    const windSpeed = weather.wind.speed;
+
+    const condition =
+        weather.weather[0].description.toLowerCase();
+
+    // Rain suggestion
+    if (
+        condition.includes("rain") ||
+        condition.includes("drizzle")
+    ) {
+        suggestions.push({
+            icon: "fa-solid fa-umbrella",
+            title: "Carry an Umbrella",
+            text: "Rain is currently affecting the weather. Keep rain protection with you."
+        });
+    }
+
+    // High temperature
+    if (temp >= 35) {
+        suggestions.push({
+            icon: "fa-solid fa-temperature-high",
+            title: "Stay Hydrated",
+            text: "High temperature detected. Drink plenty of water and avoid prolonged outdoor exposure."
+        });
+    }
+
+    // High humidity
+    if (humidity >= 80) {
+        suggestions.push({
+            icon: "fa-solid fa-droplet",
+            title: "High Humidity",
+            text: "Humidity is high. Stay hydrated and take regular breaks during outdoor activities."
+        });
+    }
+
+    // Strong wind
+    if (windSpeed >= 10) {
+        suggestions.push({
+            icon: "fa-solid fa-wind",
+            title: "Strong Wind",
+            text: "Strong winds are present. Take extra care during outdoor activities."
+        });
+    }
+
+    // Poor AQI
+    if (aqi >= 4) {
+        suggestions.push({
+            icon: "fa-solid fa-mask-face",
+            title: "Air Quality Alert",
+            text: "Air quality is poor. Consider reducing prolonged outdoor exposure."
+        });
+    }
+
+    // User-type based suggestions
+    switch (userType) {
+
+        case "fitness":
+
+            if (temp < 35 && humidity < 80) {
+                suggestions.push({
+                    icon: "fa-solid fa-person-running",
+                    title: "Good for Fitness",
+                    text: "Current weather conditions are suitable for outdoor exercise."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-person-running",
+                    title: "Choose Cooler Hours",
+                    text: "Consider exercising during cooler parts of the day because of the current weather."
+                });
+            }
+
+            break;
+
+
+        case "health":
+
+            if (temp >= 35 || aqi >= 4) {
+                suggestions.push({
+                    icon: "fa-solid fa-heart-pulse",
+                    title: "Health Precaution",
+                    text: "Current temperature or air quality requires extra care during outdoor activities."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-heart-pulse",
+                    title: "Weather Looks Comfortable",
+                    text: "Current weather conditions are suitable for normal outdoor activities."
+                });
+            }
+
+            break;
+
+
+        case "traveler":
+
+            suggestions.push({
+                icon: "fa-solid fa-suitcase",
+                title: "Travel Suggestion",
+                text: "Check the latest forecast before starting your journey."
+            });
+
+            break;
+
+
+        case "commuter":
+
+            if (
+                condition.includes("rain") ||
+                condition.includes("drizzle")
+            ) {
+                suggestions.push({
+                    icon: "fa-solid fa-car",
+                    title: "Plan Your Commute",
+                    text: "Rain may affect your journey. Allow some extra travel time and carry rain protection."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-car",
+                    title: "Commute Conditions",
+                    text: "Current weather conditions are suitable for normal commuting."
+                });
+            }
+
+            break;
+
+
+        case "agriculture":
+
+            if (
+                condition.includes("rain") ||
+                condition.includes("drizzle")
+            ) {
+                suggestions.push({
+                    icon: "fa-solid fa-seedling",
+                    title: "Check Irrigation Needs",
+                    text: "Rainfall is present. Consider current soil moisture before irrigation."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-seedling",
+                    title: "Monitor Weather",
+                    text: "Monitor upcoming rainfall before making irrigation decisions."
+                });
+            }
+
+            break;
+
+
+        case "beach":
+
+            if (windSpeed >= 8) {
+                suggestions.push({
+                    icon: "fa-solid fa-umbrella-beach",
+                    title: "Beach Wind Caution",
+                    text: "Wind speed is relatively high. Check local marine conditions before water activities."
+                });
+            } else if (
+                !condition.includes("rain") &&
+                !condition.includes("drizzle")
+            ) {
+                suggestions.push({
+                    icon: "fa-solid fa-umbrella-beach",
+                    title: "Beach Conditions",
+                    text: "Current weather appears suitable for outdoor beach activities."
+                });
+            }
+
+            break;
+
+
+        case "family":
+
+            if (
+                !condition.includes("rain") &&
+                !condition.includes("drizzle") &&
+                temp < 35
+            ) {
+                suggestions.push({
+                    icon: "fa-solid fa-people-group",
+                    title: "Family Activity",
+                    text: "Current conditions are suitable for normal outdoor family activities."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-people-group",
+                    title: "Plan Indoor Activities",
+                    text: "Current weather may affect outdoor family activities. Consider an indoor alternative."
+                });
+            }
+
+            break;
+
+
+        case "event":
+
+            if (
+                condition.includes("rain") ||
+                condition.includes("drizzle")
+            ) {
+                suggestions.push({
+                    icon: "fa-solid fa-calendar-xmark",
+                    title: "Backup Arrangement",
+                    text: "Rain may affect outdoor events. Consider a covered venue or backup arrangement."
+                });
+            } else {
+                suggestions.push({
+                    icon: "fa-solid fa-calendar-check",
+                    title: "Event Planning",
+                    text: "Current conditions are suitable for outdoor event planning."
+                });
+            }
+
+            break;
+    }
+
+    // Return maximum 5 suggestions
+    return suggestions.slice(0, 5);
+}
 function buildDailyForecast(forecastList) {
 
     const dailyForecast = {};
@@ -736,6 +963,13 @@ router.get("/dashboard-data", async (req, res) => {
             user ? user.userType : null,
             currentWeather
         );
+        // Today's personalized suggestions
+        const suggestions = getSuggestions(
+            user ? user.userType : null,
+            currentWeather,
+            aqi,
+            forecastData.list
+        );
         // Send dashboard data
         res.json({
 
@@ -748,6 +982,7 @@ router.get("/dashboard-data", async (req, res) => {
                     userType: user.userType
                 }
                 : null,
+
             currentWeather: {
                 city: currentWeather.name,
                 temperature: currentWeather.main.temp,
@@ -757,6 +992,7 @@ router.get("/dashboard-data", async (req, res) => {
                 weather: currentWeather.weather[0].description,
                 icon: currentWeather.weather[0].icon
             },
+
             airQuality: {
                 aqi: aqi,
                 status: aqiStatus
@@ -765,8 +1001,11 @@ router.get("/dashboard-data", async (req, res) => {
             forecast: buildDailyForecast(
                 forecastData.list
             ),
-            
-            personalizedData: personalizedData
+
+            personalizedData: personalizedData,
+
+            suggestions: suggestions
+
         });
 
     } catch (error) {

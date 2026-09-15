@@ -5,9 +5,11 @@
         <!-- Welcome Section -->
         <section class="dashboard-welcome">
             <div class="container">
+
                 <div class="welcome-content">
 
                     <div>
+
                         <span class="welcome-label">
                             PERSONALIZED WEATHER DASHBOARD
                         </span>
@@ -20,7 +22,9 @@
                             Weather information and personalized insights
                             based on your preferences.
                         </p>
+
                     </div>
+
 
                     <a href="/preferences" class="personalize-btn">
                         <i class="fa-solid fa-sliders"></i>
@@ -28,12 +32,15 @@
                     </a>
 
                 </div>
+
             </div>
         </section>
 
 
+
         <!-- Search Weather -->
         <section class="dashboard-search-section">
+
             <div class="container">
 
                 <div class="dashboard-search-card">
@@ -45,14 +52,20 @@
                         </div>
 
                         <div>
-                            <h3>Search Weather</h3>
+
+                            <h3>
+                                Search Weather
+                            </h3>
+
                             <p>
                                 Enter a city to view current weather
                                 and forecast.
                             </p>
+
                         </div>
 
                     </div>
+
 
                     <form id="searchForm">
 
@@ -61,8 +74,11 @@
                             <input type="text" id="cityInput" placeholder="Enter city name" autocomplete="off" required>
 
                             <button type="submit">
+
                                 <i class="fa-solid fa-magnifying-glass"></i>
+
                                 Search
+
                             </button>
 
                         </div>
@@ -72,26 +88,41 @@
                 </div>
 
             </div>
+
         </section>
+
 
 
         <!-- Current Weather -->
         <section class="current-weather-section" id="current-weather">
+
             <div class="container">
 
                 <div class="section-heading">
 
                     <div>
-                        <span>LIVE WEATHER</span>
-                        <h2>Current Weather</h2>
+
+                        <span>
+                            LIVE WEATHER
+                        </span>
+
+                        <h2>
+                            Current Weather
+                        </h2>
+
                     </div>
 
+
                     <div class="live-status">
+
                         <span></span>
+
                         Live Data
+
                     </div>
 
                 </div>
+
 
 
                 <div class="current-weather-card">
@@ -102,13 +133,20 @@
                         <div class="weather-main-content">
 
                             <p class="weather-location">
+
                                 <i class="fa-solid fa-location-dot"></i>
-                                <span id="city">Loading...</span>
+
+                                <span id="city">
+                                    Loading...
+                                </span>
+
                             </p>
+
 
                             <h1 id="temperature">
                                 --°C
                             </h1>
+
 
                             <p id="weather" class="weather-description">
                                 Loading...
@@ -117,11 +155,15 @@
                         </div>
 
 
+
                         <div class="weather-icon">
+
                             <i class="fa-solid fa-cloud-sun"></i>
+
                         </div>
 
                     </div>
+
 
 
                     <!-- Weather Details -->
@@ -130,46 +172,72 @@
                         <div class="weather-detail">
 
                             <div class="detail-icon">
+
                                 <i class="fa-solid fa-temperature-half"></i>
+
                             </div>
 
+
                             <div>
-                                <span>Feels Like</span>
+
+                                <span>
+                                    Feels Like
+                                </span>
+
                                 <strong id="feelsLike">
                                     --°C
                                 </strong>
+
                             </div>
 
                         </div>
 
 
+
                         <div class="weather-detail">
 
                             <div class="detail-icon">
+
                                 <i class="fa-solid fa-droplet"></i>
+
                             </div>
 
+
                             <div>
-                                <span>Humidity</span>
+
+                                <span>
+                                    Humidity
+                                </span>
+
                                 <strong id="humidity">
                                     --%
                                 </strong>
+
                             </div>
 
                         </div>
 
 
+
                         <div class="weather-detail">
 
                             <div class="detail-icon">
+
                                 <i class="fa-solid fa-wind"></i>
+
                             </div>
 
+
                             <div>
-                                <span>Wind Speed</span>
+
+                                <span>
+                                    Wind Speed
+                                </span>
+
                                 <strong id="windSpeed">
                                     -- m/s
                                 </strong>
+
                             </div>
 
                         </div>
@@ -179,63 +247,99 @@
                 </div>
 
             </div>
+
         </section>
+
 
 
         <!-- AQI -->
         <section class="aqi-section">
+
             <div class="container">
 
                 <div class="section-heading">
 
                     <div>
-                        <span>AIR QUALITY</span>
-                        <h2>Air Quality Index</h2>
+
+                        <span>
+                            AIR QUALITY
+                        </span>
+
+                        <h2>
+                            Air Quality Index
+                        </h2>
+
                     </div>
 
                 </div>
+
 
 
                 <div class="aqi-card">
 
                     <div class="aqi-icon">
+
                         <i class="fa-solid fa-wind"></i>
+
                     </div>
+
 
 
                     <div class="aqi-value">
-                        <span>AQI</span>
+
+                        <span>
+                            AQI
+                        </span>
+
                         <strong id="aqi">
                             --
                         </strong>
+
                     </div>
 
 
+
                     <div class="aqi-status">
-                        <span>Status</span>
+
+                        <span>
+                            Status
+                        </span>
+
                         <strong id="aqiStatus">
                             Loading...
                         </strong>
+
                     </div>
 
                 </div>
 
             </div>
+
         </section>
+
 
 
         <!-- Forecast -->
         <section class="forecast-section" id="forecast">
+
             <div class="container">
 
                 <div class="section-heading">
 
                     <div>
-                        <span>WEATHER FORECAST</span>
-                        <h2>Upcoming Forecast</h2>
+
+                        <span>
+                            WEATHER FORECAST
+                        </span>
+
+                        <h2>
+                            Upcoming Forecast
+                        </h2>
+
                     </div>
 
                 </div>
+
 
 
                 <div id="forecastContainer" class="forecast-grid">
@@ -247,7 +351,9 @@
                 </div>
 
             </div>
+
         </section>
+
 
 
         <!-- Personalized Weather -->
@@ -258,34 +364,90 @@
                 <div class="section-heading">
 
                     <div>
-                        <span>PERSONALIZED INSIGHTS</span>
-                        <h2>Weather For You</h2>
+
+                        <span>
+                            PERSONALIZED INSIGHTS
+                        </span>
+
+                        <h2>
+                            Weather For You
+                        </h2>
+
                     </div>
 
+
                     <span id="userTypeBadge" class="user-type-badge">
-                        <%= user ? (user.userType || "General") : "Guest" %>
+
+                        <%= user ? (user.userType || "General" ) : "Guest" %>
+
                     </span>
 
                 </div>
+
+
+
                 <div class="personalized-card">
 
                     <div class="personalized-header">
+
                         <div class="personalized-icon">
+
                             <i class="fa-solid fa-user-check"></i>
+
                         </div>
+
 
                         <div>
-                            <h3 id="personalizedMessage">Loading...</h3>
-                            <p id="personalizedAdvice">Loading...</p>
+
+                            <h3 id="personalizedMessage">
+                                Loading...
+                            </h3>
+
+                            <p id="personalizedAdvice">
+                                Loading...
+                            </p>
+
                         </div>
+
                     </div>
 
-                    <div id="personalizedDetails" class="personalized-details"></div>
+
+                    <div id="personalizedDetails" class="personalized-details">
+                    </div>
+
                 </div>
+
             </div>
 
         </section>
 
+
+
+        <!-- Today's Suggestions -->
+        <section class="suggestions-section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span>
+                            SMART RECOMMENDATIONS
+                        </span>
+
+                        <h2>
+                            Today's Suggestions
+                        </h2>
+                    </div>
+                </div>
+                <div id="suggestionsContainer" class="suggestions-grid">
+                    <div class="loading-message">
+                        Loading suggestions...
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
     <!-- Dashboard JavaScript -->
     <script src="/js/dashboard.js"></script>

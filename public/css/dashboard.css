@@ -638,6 +638,9 @@
     .personalized-details {
         grid-template-columns: repeat(2, 1fr);
     }
+        .suggestions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* MOBILE */
@@ -692,6 +695,9 @@
 
     .personalized-details {
         grid-template-columns: repeat(2, 1fr);
+    }
+        .suggestions-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -861,4 +867,114 @@
     font-size: 12px;
     font-weight: 700;
     text-transform: capitalize;
+}
+
+/* TODAY'S SUGGESTIONS */
+
+.suggestions-section {
+    padding: 35px 0 55px;
+}
+
+
+/* SUGGESTIONS GRID */
+
+.suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+
+/* SUGGESTION CARD */
+
+.suggestion-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    min-height: 135px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #d4e4eb;
+    border-radius: 10px;
+    box-shadow: 0 5px 18px rgba(40, 100, 130, 0.08);
+    transition: 0.25s ease;
+}
+
+
+/* SUGGESTION HOVER */
+
+.suggestion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(40, 100, 130, 0.14);
+}
+
+
+/* SUGGESTION ICON */
+
+.suggestion-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f9fd;
+    border: 1px solid #dcecf4;
+    border-radius: 8px;
+    color: #176f9f;
+    font-size: 20px;
+}
+
+
+/* SUGGESTION CONTENT */
+
+.suggestion-content {
+    flex: 1;
+}
+
+
+/* SUGGESTION TITLE */
+
+.suggestion-content h3 {
+    margin: 2px 0 7px;
+    color: #14264a;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* SUGGESTION TEXT */
+
+.suggestion-content p {
+    margin: 0;
+    color: #687983;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* NO SUGGESTIONS */
+
+.no-suggestions {
+    grid-column: 1 / -1;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #d4e4eb;
+    border-radius: 10px;
+    color: #687983;
+    text-align: center;
+    box-shadow: 0 5px 18px rgba(40, 100, 130, 0.08);
+}
+
+
+.no-suggestions i {
+    margin-bottom: 10px;
+    color: #24965c;
+    font-size: 28px;
+}
+
+
+.no-suggestions p {
+    margin: 0;
+    font-size: 14px;
 }
