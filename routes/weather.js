@@ -162,7 +162,6 @@ function getPersonalizedData(userType, weather) {
     }
 }
 /* TODAY'S PERSONALIZED SUGGESTIONS */
-
 function getSuggestions(userType, weather, aqi, forecastList) {
 
     const suggestions = [];
@@ -174,37 +173,38 @@ function getSuggestions(userType, weather, aqi, forecastList) {
     const condition =
         weather.weather[0].description.toLowerCase();
 
-    // Rain suggestion
+
+    /* =========================
+       CURRENT WEATHER
+    ========================= */
+
     if (
         condition.includes("rain") ||
         condition.includes("drizzle")
     ) {
         suggestions.push({
             icon: "fa-solid fa-umbrella",
-            title: "Carry an Umbrella",
+            title: "Rain Alert",
             text: "Rain is currently affecting the weather. Keep rain protection with you."
         });
     }
 
-    // High temperature
     if (temp >= 35) {
         suggestions.push({
             icon: "fa-solid fa-temperature-high",
-            title: "Stay Hydrated",
-            text: "High temperature detected. Drink plenty of water and avoid prolonged outdoor exposure."
+            title: "High Temperature",
+            text: "Temperature is high today. Stay hydrated and avoid prolonged outdoor exposure."
         });
     }
 
-    // High humidity
     if (humidity >= 80) {
         suggestions.push({
             icon: "fa-solid fa-droplet",
             title: "High Humidity",
-            text: "Humidity is high. Stay hydrated and take regular breaks during outdoor activities."
+            text: "Humidity is high today. Stay hydrated and take regular breaks."
         });
     }
 
-    // Strong wind
     if (windSpeed >= 10) {
         suggestions.push({
             icon: "fa-solid fa-wind",
@@ -213,181 +213,338 @@ function getSuggestions(userType, weather, aqi, forecastList) {
         });
     }
 
-    // Poor AQI
+
+    /* =========================
+       AIR QUALITY
+    ========================= */
+
     if (aqi >= 4) {
+
         suggestions.push({
             icon: "fa-solid fa-mask-face",
             title: "Air Quality Alert",
             text: "Air quality is poor. Consider reducing prolonged outdoor exposure."
         });
+
     }
 
-    // User-type based suggestions
+
+    /* =========================
+       FORECAST ANALYSIS
+    ========================= */
+
+    let rainExpected = false;
+    let highRainProbability = false;
+
+    if (forecastList && forecastList.length > 0) {
+
+        for (const forecast of forecastList) {
+
+            const rainProbability =
+                (forecast.pop || 0) * 100;
+
+            const forecastCondition =
+                forecast.weather &&
+                forecast.weather[0]
+                    ? forecast.weather[0].description.toLowerCase()
+                    : "";
+
+            if (
+                forecastCondition.includes("rain") ||
+                forecastCondition.includes("drizzle") ||
+                rainProbability >= 50
+            ) {
+                rainExpected = true;
+            }
+
+            if (rainProbability >= 60) {
+                highRainProbability = true;
+            }
+        }
+    }
+
+
+    /* =========================
+       PERSONALIZED SUGGESTIONS
+    ========================= */
+
     switch (userType) {
 
-        case "fitness":
-
-            if (temp < 35 && humidity < 80) {
-                suggestions.push({
-                    icon: "fa-solid fa-person-running",
-                    title: "Good for Fitness",
-                    text: "Current weather conditions are suitable for outdoor exercise."
-                });
-            } else {
-                suggestions.push({
-                    icon: "fa-solid fa-person-running",
-                    title: "Choose Cooler Hours",
-                    text: "Consider exercising during cooler parts of the day because of the current weather."
-                });
-            }
-
-            break;
-
-
-        case "health":
-
-            if (temp >= 35 || aqi >= 4) {
-                suggestions.push({
-                    icon: "fa-solid fa-heart-pulse",
-                    title: "Health Precaution",
-                    text: "Current temperature or air quality requires extra care during outdoor activities."
-                });
-            } else {
-                suggestions.push({
-                    icon: "fa-solid fa-heart-pulse",
-                    title: "Weather Looks Comfortable",
-                    text: "Current weather conditions are suitable for normal outdoor activities."
-                });
-            }
-
-            break;
-
+        /* ---------- TRAVELER ---------- */
 
         case "traveler":
 
-            suggestions.push({
-                icon: "fa-solid fa-suitcase",
-                title: "Travel Suggestion",
-                text: "Check the latest forecast before starting your journey."
-            });
+            if (highRainProbability) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-cloud-rain",
+                    title: "Rain Expected",
+                    text: "Rain is likely during the forecast period. Keep rain gear with you while travelling."
+                });
+
+            } else if (rainExpected) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-umbrella",
+                    title: "Possible Rain",
+                    text: "Rain may occur during the forecast period. Keep rain protection with you."
+                });
+
+            } else if (temp >= 35) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-bottle-water",
+                    title: "Stay Hydrated",
+                    text: "High temperatures are expected. Carry enough water while travelling."
+                });
+
+            } else {
+
+                suggestions.push({
+                    icon: "fa-solid fa-suitcase",
+                    title: "Travel Conditions",
+                    text: "Weather conditions look suitable for travelling. Check the latest forecast before departure."
+                });
+
+            }
 
             break;
 
+
+        /* ---------- FITNESS ---------- */
+
+        case "fitness":
+
+            if (rainExpected) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-dumbbell",
+                    title: "Indoor Workout Recommended",
+                    text: "Rain is possible during the forecast period. Consider an indoor workout."
+                });
+
+            } else if (temp >= 35) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-person-running",
+                    title: "Choose Cooler Hours",
+                    text: "High temperatures are expected. Prefer early morning or evening exercise."
+                });
+
+            } else {
+
+                suggestions.push({
+                    icon: "fa-solid fa-person-running",
+                    title: "Good for Fitness",
+                    text: "Current weather conditions look suitable for outdoor exercise."
+                });
+
+            }
+
+            break;
+
+
+        /* ---------- COMMUTER ---------- */
 
         case "commuter":
 
-            if (
-                condition.includes("rain") ||
-                condition.includes("drizzle")
-            ) {
+            if (rainExpected) {
+
                 suggestions.push({
                     icon: "fa-solid fa-car",
-                    title: "Plan Your Commute",
-                    text: "Rain may affect your journey. Allow some extra travel time and carry rain protection."
+                    title: "Commute Alert",
+                    text: "Rain is possible during your commute. Carry rain protection and allow extra travel time."
                 });
+
+            } else if (windSpeed >= 10) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-wind",
+                    title: "Windy Commute",
+                    text: "Strong winds are present. Travel carefully and check road conditions."
+                });
+
             } else {
+
                 suggestions.push({
                     icon: "fa-solid fa-car",
                     title: "Commute Conditions",
-                    text: "Current weather conditions are suitable for normal commuting."
+                    text: "Current weather conditions look suitable for normal commuting."
                 });
+
             }
 
             break;
 
+
+        /* ---------- AGRICULTURE ---------- */
 
         case "agriculture":
 
-            if (
-                condition.includes("rain") ||
-                condition.includes("drizzle")
-            ) {
+            if (rainExpected) {
+
                 suggestions.push({
                     icon: "fa-solid fa-seedling",
-                    title: "Check Irrigation Needs",
-                    text: "Rainfall is present. Consider current soil moisture before irrigation."
+                    title: "Rain Expected",
+                    text: "Rain is possible during the forecast period. Check soil moisture before irrigation."
                 });
+
+            } else if (temp >= 35) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-seedling",
+                    title: "Monitor Soil Moisture",
+                    text: "High temperatures may increase water requirements. Monitor soil moisture regularly."
+                });
+
             } else {
+
                 suggestions.push({
                     icon: "fa-solid fa-seedling",
                     title: "Monitor Weather",
-                    text: "Monitor upcoming rainfall before making irrigation decisions."
+                    text: "Monitor upcoming weather conditions before making irrigation decisions."
                 });
+
             }
 
             break;
 
+
+        /* ---------- BEACH ---------- */
 
         case "beach":
 
-            if (windSpeed >= 8) {
+            if (rainExpected) {
+
                 suggestions.push({
                     icon: "fa-solid fa-umbrella-beach",
-                    title: "Beach Wind Caution",
-                    text: "Wind speed is relatively high. Check local marine conditions before water activities."
+                    title: "Beach Weather Alert",
+                    text: "Rain is possible during the forecast period. Consider postponing outdoor beach activities."
                 });
-            } else if (
-                !condition.includes("rain") &&
-                !condition.includes("drizzle")
-            ) {
+
+            } else if (windSpeed >= 8) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-wind",
+                    title: "Beach Wind Caution",
+                    text: "Wind speed is relatively high. Check local conditions before water activities."
+                });
+
+            } else {
+
                 suggestions.push({
                     icon: "fa-solid fa-umbrella-beach",
                     title: "Beach Conditions",
-                    text: "Current weather appears suitable for outdoor beach activities."
+                    text: "Current conditions look suitable for outdoor beach activities."
                 });
+
             }
 
             break;
 
+
+        /* ---------- FAMILY ---------- */
 
         case "family":
 
-            if (
-                !condition.includes("rain") &&
-                !condition.includes("drizzle") &&
-                temp < 35
-            ) {
+            if (rainExpected) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-house",
+                    title: "Plan Indoor Activities",
+                    text: "Rain is possible during the forecast period. Consider an indoor family activity."
+                });
+
+            } else if (temp >= 35) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-people-group",
+                    title: "Avoid Peak Heat",
+                    text: "High temperatures are expected. Prefer outdoor family activities during cooler hours."
+                });
+
+            } else {
+
                 suggestions.push({
                     icon: "fa-solid fa-people-group",
                     title: "Family Activity",
-                    text: "Current conditions are suitable for normal outdoor family activities."
+                    text: "Weather conditions look suitable for outdoor family activities."
                 });
-            } else {
-                suggestions.push({
-                    icon: "fa-solid fa-people-group",
-                    title: "Plan Indoor Activities",
-                    text: "Current weather may affect outdoor family activities. Consider an indoor alternative."
-                });
+
             }
 
             break;
 
 
+        /* ---------- EVENT ---------- */
+
         case "event":
 
-            if (
-                condition.includes("rain") ||
-                condition.includes("drizzle")
-            ) {
+            if (rainExpected) {
+
                 suggestions.push({
                     icon: "fa-solid fa-calendar-xmark",
-                    title: "Backup Arrangement",
-                    text: "Rain may affect outdoor events. Consider a covered venue or backup arrangement."
+                    title: "Event Weather Alert",
+                    text: "Rain is possible during the forecast period. Keep a covered venue or backup arrangement ready."
                 });
+
+            } else if (windSpeed >= 10) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-wind",
+                    title: "Outdoor Event Caution",
+                    text: "Strong winds may affect outdoor arrangements. Check the latest forecast before the event."
+                });
+
             } else {
+
                 suggestions.push({
                     icon: "fa-solid fa-calendar-check",
                     title: "Event Planning",
-                    text: "Current conditions are suitable for outdoor event planning."
+                    text: "Current weather conditions look suitable for outdoor event planning."
                 });
+
+            }
+
+            break;
+
+
+        /* ---------- HEALTH ---------- */
+
+        case "health":
+
+            if (aqi >= 4) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-heart-pulse",
+                    title: "Health Precaution",
+                    text: "Poor air quality may affect outdoor activities. Consider limiting prolonged exposure."
+                });
+
+            } else if (temp >= 35) {
+
+                suggestions.push({
+                    icon: "fa-solid fa-heart-pulse",
+                    title: "Heat Precaution",
+                    text: "High temperature is expected. Stay hydrated and avoid prolonged outdoor exposure."
+                });
+
+            } else {
+
+                suggestions.push({
+                    icon: "fa-solid fa-heart-pulse",
+                    title: "Weather Looks Comfortable",
+                    text: "Current weather conditions look suitable for normal outdoor activities."
+                });
+
             }
 
             break;
     }
 
-    // Return maximum 5 suggestions
     return suggestions.slice(0, 5);
 }
+ 
 function buildDailyForecast(forecastList) {
 
     const dailyForecast = {};
