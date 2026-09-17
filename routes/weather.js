@@ -173,10 +173,7 @@ function getSuggestions(userType, weather, aqi, forecastList) {
     const condition =
         weather.weather[0].description.toLowerCase();
 
-
-    /* =========================
-       CURRENT WEATHER
-    ========================= */
+    // Current weather
 
     if (
         condition.includes("rain") ||
